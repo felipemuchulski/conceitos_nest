@@ -6,4 +6,8 @@ GET {{baseUrl}}/home/hello
 
 ### ConceitosManualController
 # @name ConceitosManualControllerHome
-GET {{baseUrl}}/conceitos-manual
+GET {{baseUrl}}/conceitos-manual/home
+
+### ConceitosAutomaticoController
+# @name ConceitosAutomaticoControllerHome
+GET {{baseUrl}}/conceitos-automatico

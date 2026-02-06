@@ -3,10 +3,8 @@ import { ConceitosManualService } from './conceitos-manual.service';
 
 @Controller('/conceitos-manual')
 export class ConceitosManualController {
-  constructor(
-    private readonly conceitosManualService: ConceitosManualService,
-  ) {}
-  @Get()
+  constructor(private readonly conceitosManualService: ConceitosManualService) {}
+  @Get('/home')
   home(): string {
     return this.conceitosManualService.solucionaHome();
   }
