@@ -11,3 +11,12 @@ GET {{baseUrl}}/conceitos-manual/home
 ### ConceitosAutomaticoController
 # @name ConceitosAutomaticoControllerHome
 GET {{baseUrl}}/conceitos-automatico
+
+### RecadosController
+POST {{baseUrl}}/recados
+Content-Type: application/json
+
+{
+    "recado": "recado de teste",
+    "autor": "Felipe Muchulski"
+}
