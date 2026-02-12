@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Get, Param, Post, Patch, Delete } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Get, Param, Post, Patch, Delete, Query } from '@nestjs/common';
 import { CreateRecadoDTO } from './dtos/create-recado.dto';
 import { AtulizaRecadosDTO } from './dtos/atualizar-recado.dto';
 
@@ -44,5 +44,12 @@ export class RecadosController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return `Essa rota remove o recado de id ${id}`;
+  }
+
+  @Get()
+  withQueryParams(@Query() pagination: any) {
+    const { limit = 10, offset = 0 } = pagination;
+    console.log(pagination);
+    return `Retorna todos os recaods. Limit =${limit} e offset=${offset}`;
   }
 }
