@@ -20,3 +20,13 @@ Content-Type: application/json
     "recado": "recado de teste",
     "autor": "Felipe Muchulski"
 }
+
+### 
+# Patch
+PATCH {{baseUrl}}/recados/1/
+Content-Type: application/json
+
+{
+    "recado": "Este é o novo recado",
+    "atualizar": "teste"
+}
