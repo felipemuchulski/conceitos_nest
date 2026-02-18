@@ -17,18 +17,18 @@ POST {{baseUrl}}/recados
 Content-Type: application/json
 
 {
-    "recado": "recado de teste",
-    "autor": "Felipe Muchulski"
+    "texto": "recado de teste",
+    "de": "Felipe Muchulski",
+    "para": "Lilian Borsoi"
 }
 
 ### 
 # Patch
-PATCH {{baseUrl}}/recados/1/
+PATCH {{baseUrl}}/recados/1771357261850/
 Content-Type: application/json
 
 {
-    "recado": "Este é o novo recado",
-    "atualizar": "teste"
+    "texto": "Este é o novo recado"
 }
 
 ### QueryParams na rota
@@ -38,3 +38,5 @@ GET {{baseUrl}}/recados/
 &user=luiz
 
 
+### findall
+GET {{baseUrl}}/recados/all_recados

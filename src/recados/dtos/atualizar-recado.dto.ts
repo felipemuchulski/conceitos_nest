@@ -1,4 +1,5 @@
 export class AtulizaRecadosDTO {
-  recado?: string;
-  autor?: string;
+  readonly texto?: string;
+  readonly de?: string;
+  readonly para?: string;
 }

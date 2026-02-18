@@ -1,5 +1,8 @@
 export interface Recado {
   id: number;
-  recado: string;
-  autor: string;
+  texto: string;
+  de: string;
+  para: string;
+  lido: boolean;
+  data: Date;
 }
