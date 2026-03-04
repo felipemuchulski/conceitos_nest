@@ -1,16 +1,28 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRecadoDTO } from './dtos/create-recado.dto';
-import { Recado } from './types/types';
+// import { Recado } from './types/types';
 import { AtulizaRecadosDTO } from './dtos/atualizar-recado.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Recado } from './entities/recado.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class RecadosService {
+  constructor(
+    @InjectRepository(Recado)
+    private readonly recadoRepository: Repository<Recado>,
+  ) {}
+
   private recados: Recado[] = [];
 
-  createRecado(dto: CreateRecadoDTO) {
-    const novo = { id: Date.now(), ...dto, lido: false, data: new Date() };
-    this.recados.push(novo);
-    return novo;
+  async createRecado(dto: CreateRecadoDTO) {
+    const novoRecado = {
+      ...dto,
+      data: new Date(),
+    };
+
+    const recado = this.recadoRepository.create(novoRecado);
+    return this.recadoRepository.save(recado);
   }
 
   updateRecado(id: number, dto: AtulizaRecadosDTO) {
@@ -23,26 +35,25 @@ export class RecadosService {
     return this.recados[indice];
   }
 
-  findAll() {
-    return this.recados;
+  async findAll() {
+    const recados = await this.recadoRepository.find();
+    return recados;
   }
 
-  findOne(id: number) {
-    const recado = this.recados.find((recado) => recado.id === id);
-
+  async findOne(id: number) {
+    const recado = await this.recadoRepository.findOne({ where: { id } });
     if (!recado) {
       throw new NotFoundException(`Recado com o id ${id} não encontrado`);
     }
-    return this.recados.find((recado) => recado.id == id);
+    return recado;
   }
 
-  delete(id: number) {
-    const existRecord = this.recados.find((recado) => recado.id === id);
-    if (!existRecord) {
-      throw new NotFoundException(`Recado com id ${id} não encontrado`);
-    }
+  async delete(id: number) {
+    const existeRecado = await this.recadoRepository.findOneBy({ id });
 
-    this.recados = this.recados.filter((r) => r.id != id);
-    return { deleted: true };
+    if (!existeRecado) {
+      throw new NotFoundException(`Recado com o id ${id} não encontrado`);
+    }
+    return this.recadoRepository.delete({ id });
   }
 }
