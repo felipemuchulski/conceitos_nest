@@ -25,15 +25,26 @@ export class RecadosService {
     return this.recadoRepository.save(recado);
   }
 
-  updateRecado(id: number, dto: AtulizaRecadosDTO) {
-    const indice = this.recados.findIndex((recado) => recado.id === id);
-    if (indice === -1) {
+  async updateRecado(id: number, dto: AtulizaRecadosDTO) {
+    const partialUpdateRecadoDto = {
+      lido: dto?.lido,
+      texto: dto?.texto,
+    };
+    const recado = await this.recadoRepository.preload({ id, ...partialUpdateRecadoDto });
+    if (!recado) {
       throw new NotFoundException(`Recado com o id ${id} não encontrado`);
     }
-
-    this.recados[indice] = { ...this.recados[indice], ...dto };
-    return this.recados[indice];
+    return this.recadoRepository.save(recado);
   }
+  // updateRecado(id: number, dto: AtulizaRecadosDTO) {
+  //   const indice = this.recados.findIndex((recado) => recado.id === id);
+  //   if (indice === -1) {
+  //     throw new NotFoundException(`Recado com o id ${id} não encontrado`);
+  //   }
+
+  //   this.recados[indice] = { ...this.recados[indice], ...dto };
+  //   return this.recados[indice];
+  // }
 
   async findAll() {
     const recados = await this.recadoRepository.find();
