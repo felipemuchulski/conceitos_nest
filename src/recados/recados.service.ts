@@ -13,8 +13,6 @@ export class RecadosService {
     private readonly recadoRepository: Repository<Recado>,
   ) {}
 
-  private recados: Recado[] = [];
-
   async createRecado(dto: CreateRecadoDTO) {
     const novoRecado = {
       ...dto,
