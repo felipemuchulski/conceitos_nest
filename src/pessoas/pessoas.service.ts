@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePessoaDto } from './dto/create-pessoa.dto';
 import { UpdatePessoaDto } from './dto/update-pessoa.dto';
 import { Repository } from 'typeorm';
@@ -13,9 +13,17 @@ export class PessoasService {
   ) {}
 
   async create(createPessoaDto: CreatePessoaDto) {
+    const emailExiste = await this.pessoasRepository.findOneBy({
+      email: createPessoaDto.email,
+    });
+
+    if (emailExiste) {
+      throw new ConflictException('E-mail já cadastrado');
+    }
+
     const novaPessoa = this.pessoasRepository.create({
       email: createPessoaDto.email,
-      passwordHash: createPessoaDto.passwordHash,
+      passwordHash: createPessoaDto.password,
       nome: createPessoaDto.nome,
     });
 
@@ -37,10 +45,29 @@ export class PessoasService {
   }
 
   async update(id: number, updatePessoaDto: UpdatePessoaDto) {
-    return `This action updates a #${id} pessoa`;
+    const { password, ...anotherInfos } = updatePessoaDto;
+
+    const pessoa = await this.pessoasRepository.preload({
+      id,
+      ...anotherInfos,
+      passwordHash: password,
+    });
+
+    if (!pessoa) {
+      throw new NotFoundException('Pessoa não encontrada');
+    }
+
+    return this.pessoasRepository.save(pessoa);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} pessoa`;
+  // remove não deve ser permitido a pessoa se apagar da base de dados
+  async remove(id: number) {
+    const existePessoa = await this.pessoasRepository.findOneBy({ id });
+
+    if (!existePessoa) {
+      throw new NotFoundException(`Pessoa com o id ${id} não encontrada`);
+    }
+
+    return this.pessoasRepository.delete({ id });
   }
 }

@@ -1,8 +1,8 @@
 export interface Recado {
   id: number;
   texto: string;
-  de: string;
-  para: string;
+  de: number;
+  para: number;
   lido: boolean;
   data: Date;
 }
