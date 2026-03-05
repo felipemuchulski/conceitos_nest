@@ -1,38 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePessoaDto } from './dto/create-pessoa.dto';
 import { UpdatePessoaDto } from './dto/update-pessoa.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Pessoa } from './entities/pessoa.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class PessoasService {
   constructor(
     @InjectRepository(Pessoa)
-    private readonly pessoaRepository: Repository<Pessoa>,
+    private readonly pessoasRepository: Repository<Pessoa>,
   ) {}
 
   async create(createPessoaDto: CreatePessoaDto) {
-    const dadosPessoa = {
-      nome: createPessoaDto.nome,
-      passwordHash: createPessoaDto.password,
+    const novaPessoa = this.pessoasRepository.create({
       email: createPessoaDto.email,
-    };
+      passwordHash: createPessoaDto.passwordHash,
+      nome: createPessoaDto.nome,
+    });
 
-    const novaPessoa = this.pessoaRepository.create(dadosPessoa);
-    await this.pessoaRepository.save(novaPessoa);
+    await this.pessoasRepository.save(novaPessoa);
     return novaPessoa;
   }
 
-  findAll() {
-    return `This action returns all pessoas`;
+  async findAll() {
+    const pessoas = await this.pessoasRepository.find();
+    return pessoas;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} pessoa`;
+  async findOne(id: number) {
+    const pessoa = await this.pessoasRepository.findOneBy({ id });
+    if (!pessoa) {
+      throw new NotFoundException(`Pessoa não encontrada com o id ${id}`);
+    }
+    return pessoa;
   }
 
-  update(id: number, updatePessoaDto: UpdatePessoaDto) {
+  async update(id: number, updatePessoaDto: UpdatePessoaDto) {
     return `This action updates a #${id} pessoa`;
   }
 
