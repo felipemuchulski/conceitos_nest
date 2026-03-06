@@ -1,21 +1,29 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRecadoDTO } from './dtos/create-recado.dto';
-// import { Recado } from './types/types';
 import { AtulizaRecadosDTO } from './dtos/atualizar-recado.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Recado } from './entities/recado.entity';
 import { Repository } from 'typeorm';
+import { PessoasService } from '../pessoas/pessoas.service';
 
 @Injectable()
 export class RecadosService {
   constructor(
     @InjectRepository(Recado)
     private readonly recadoRepository: Repository<Recado>,
+    private readonly pessoasService: PessoasService,
   ) {}
 
   async createRecado(dto: CreateRecadoDTO) {
+    const { deId, paraId } = dto;
+    // Achar pessoa que está criando o recado
+    const de = await this.pessoasService.findOne(deId);
+    const para = await this.pessoasService.findOne(paraId);
+    // Achar a pessoa que está recebendo o recado
     const novoRecado = {
-      ...dto,
+      texto: dto.texto,
+      de,
+      para,
       data: new Date(),
     };
 

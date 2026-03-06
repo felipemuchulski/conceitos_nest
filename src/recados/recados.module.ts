@@ -4,9 +4,10 @@ import { RecadosService } from './recados.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Recado } from './entities/recado.entity';
 import { Pessoa } from '../pessoas/entities/pessoa.entity';
+import { PessoasModule } from '../pessoas/pessoas.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Recado, Pessoa])],
+  imports: [TypeOrmModule.forFeature([Recado, Pessoa]), PessoasModule],
   controllers: [RecadosController],
   providers: [RecadosService],
 })
