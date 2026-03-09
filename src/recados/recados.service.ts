@@ -28,7 +28,17 @@ export class RecadosService {
     };
 
     const recado = this.recadoRepository.create(novoRecado);
-    return this.recadoRepository.save(recado);
+    await this.recadoRepository.save(recado);
+
+    return {
+      ...recado,
+      de: {
+        id: recado.de.id,
+      },
+      para: {
+        id: recado.para.id,
+      },
+    };
   }
 
   async updateRecado(id: number, dto: AtulizaRecadosDTO) {
@@ -44,7 +54,22 @@ export class RecadosService {
   }
 
   async findAll() {
-    const recados = await this.recadoRepository.find();
+    const recados = await this.recadoRepository.find({
+      relations: ['de', 'para'],
+      order: {
+        id: 'desc',
+      },
+      select: {
+        de: {
+          id: true,
+          nome: true,
+        },
+        para: {
+          id: true,
+          nome: true,
+        },
+      },
+    });
     return recados;
   }
 
