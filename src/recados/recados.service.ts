@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Recado } from './entities/recado.entity';
 import { Repository } from 'typeorm';
 import { PessoasService } from '../pessoas/pessoas.service';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class RecadosService {
@@ -42,15 +43,13 @@ export class RecadosService {
   }
 
   async updateRecado(id: number, dto: AtulizaRecadosDTO) {
-    const partialUpdateRecadoDto = {
-      lido: dto?.lido,
-      texto: dto?.texto,
-    };
-    const recado = await this.recadoRepository.preload({ id, ...partialUpdateRecadoDto });
-    if (!recado) {
-      throw new NotFoundException(`Recado com o id ${id} não encontrado`);
-    }
-    return this.recadoRepository.save(recado);
+    const recado = await this.findOne(id);
+
+    recado.texto = dto?.texto ?? recado.texto;
+    recado.lido = dto?.lido ?? recado.lido;
+
+    await this.recadoRepository.save(recado);
+    return recado;
   }
 
   async findAll() {
@@ -70,6 +69,31 @@ export class RecadosService {
         },
       },
     });
+    return recados;
+  }
+
+  async findAllPagination(paginationDto?: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto ?? {};
+
+    const recados = await this.recadoRepository.find({
+      take: limit,
+      skip: offset,
+      relations: ['de', 'para'],
+      order: {
+        id: 'desc',
+      },
+      select: {
+        de: {
+          id: true,
+          nome: true,
+        },
+        para: {
+          id: true,
+          nome: true,
+        },
+      },
+    });
+
     return recados;
   }
 
