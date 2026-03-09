@@ -28,19 +28,27 @@ export class RecadosService {
     };
 
     const recado = this.recadoRepository.create(novoRecado);
-    return this.recadoRepository.save(recado);
+    await this.recadoRepository.save(recado);
+
+    return {
+      ...recado,
+      de: {
+        id: recado.de.id,
+      },
+      para: {
+        id: recado.para.id,
+      },
+    };
   }
 
   async updateRecado(id: number, dto: AtulizaRecadosDTO) {
-    const partialUpdateRecadoDto = {
-      lido: dto?.lido,
-      texto: dto?.texto,
-    };
-    const recado = await this.recadoRepository.preload({ id, ...partialUpdateRecadoDto });
-    if (!recado) {
-      throw new NotFoundException(`Recado com o id ${id} não encontrado`);
-    }
-    return this.recadoRepository.save(recado);
+    const recado = await this.findOne(id);
+
+    recado.texto = dto?.texto ?? recado.texto;
+    recado.lido = dto?.lido ?? recado.lido;
+
+    await this.recadoRepository.save(recado);
+    return recado;
   }
 
   async findAll() {
