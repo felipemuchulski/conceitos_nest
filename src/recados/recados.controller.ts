@@ -1,7 +1,8 @@
-import { Body, Controller, HttpCode, HttpStatus, Get, Param, Post, Patch, Delete } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Get, Param, Post, Patch, Delete, UsePipes } from '@nestjs/common';
 import { CreateRecadoDTO } from './dtos/create-recado.dto';
 import { AtulizaRecadosDTO } from './dtos/atualizar-recado.dto';
 import { RecadosService } from './recados.service';
+import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
 
 // CRUD
 // Create -> Post -> Criar um novo recado
@@ -17,6 +18,7 @@ import { RecadosService } from './recados.service';
 // DTO -> Objeto simples -> Validar dados / transformar dados
 
 @Controller('recados')
+@UsePipes(ParseIntIdPipe)
 export class RecadosController {
   constructor(private readonly recadosService: RecadosService) {}
 
@@ -29,7 +31,7 @@ export class RecadosController {
 
   //GET /recados/:id
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.recadosService.findOne(Number(id));
   }
 
@@ -42,14 +44,14 @@ export class RecadosController {
 
   //PATH /recados/:id
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: AtulizaRecadosDTO) {
+  update(@Param('id') id: number, @Body() dto: AtulizaRecadosDTO) {
     return this.recadosService.updateRecado(Number(id), dto);
   }
 
   // DELETE /recados/:id
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.recadosService.delete(Number(id));
   }
 }
