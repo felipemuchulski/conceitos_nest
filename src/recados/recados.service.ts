@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UseInterceptors, UsePipes } from '@nestjs/common';
 import { CreateRecadoDTO } from './dtos/create-recado.dto';
 import { AtulizaRecadosDTO } from './dtos/atualizar-recado.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,8 +6,12 @@ import { Recado } from './entities/recado.entity';
 import { Repository } from 'typeorm';
 import { PessoasService } from '../pessoas/pessoas.service';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
+import { TimingConnectionInterceptor } from 'src/common/interceptors/timing-connection.interceptor';
 
 @Injectable()
+@UsePipes(ParseIntIdPipe)
+@UseInterceptors(TimingConnectionInterceptor)
 export class RecadosService {
   constructor(
     @InjectRepository(Recado)
