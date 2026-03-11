@@ -1,4 +1,16 @@
-import { Body, Controller, HttpCode, HttpStatus, Get, Param, Post, Patch, Delete, UsePipes, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Get,
+  Param,
+  Post,
+  Patch,
+  Delete,
+  UsePipes,
+  UseInterceptors,
+} from '@nestjs/common';
 import { CreateRecadoDTO } from './dtos/create-recado.dto';
 import { AtulizaRecadosDTO } from './dtos/atualizar-recado.dto';
 import { RecadosService } from './recados.service';
