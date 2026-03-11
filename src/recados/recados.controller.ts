@@ -1,8 +1,9 @@
-import { Body, Controller, HttpCode, HttpStatus, Get, Param, Post, Patch, Delete, UsePipes } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Get, Param, Post, Patch, Delete, UsePipes, UseInterceptors } from '@nestjs/common';
 import { CreateRecadoDTO } from './dtos/create-recado.dto';
 import { AtulizaRecadosDTO } from './dtos/atualizar-recado.dto';
 import { RecadosService } from './recados.service';
 import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
+import { TimingConnectionInterceptor } from 'src/common/interceptors/timing-connection.interceptor';
 
 // CRUD
 // Create -> Post -> Criar um novo recado
@@ -19,6 +20,7 @@ import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
 
 @Controller('recados')
 @UsePipes(ParseIntIdPipe)
+@UseInterceptors(TimingConnectionInterceptor)
 export class RecadosController {
   constructor(private readonly recadosService: RecadosService) {}
 
