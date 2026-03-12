@@ -7,6 +7,8 @@ import { AppService } from './app.service';
 import { RecadosModule } from 'src/recados/recados.module';
 import { PessoasModule } from 'src/pessoas/pessoas.module';
 import { SimpleMiddleware } from 'src/common/middlewares/single.middleware';
+import { APP_GUARD } from '@nestjs/core';
+import { IsAdminGuard } from 'src/common/guards/is-admin.guard';
 
 @Module({
   imports: [
@@ -27,7 +29,14 @@ import { SimpleMiddleware } from 'src/common/middlewares/single.middleware';
     PessoasModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: IsAdminGuard,
+    },
+  ],
+  exports: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

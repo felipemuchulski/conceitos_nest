@@ -11,6 +11,7 @@ async function bootstrap() {
       transform: true,
     }),
   ); // ativa um validador para evitar erros
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
