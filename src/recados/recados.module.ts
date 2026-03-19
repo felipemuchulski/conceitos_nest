@@ -14,15 +14,11 @@ import { RecadosUtils } from './recado.utils';
   providers: [
     RecadosService,
     {
-      provide: RecadosUtils,
-      useClass: RecadosUtils,
+      provide: RecadosUtils, //chamado de token no nest
+      //useValue: new RecadosUtilsMock() // retorna os testes de mock
+      useClass: RecadosUtils, //clase usada
     },
   ],
-  exports: [
-    {
-      provide: RecadosUtils,
-      useClass: RecadosUtils,
-    },
-  ],
+  exports: [RecadosUtils],
 })
 export class RecadosModule {}
