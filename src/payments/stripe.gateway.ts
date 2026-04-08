@@ -1,8 +1,7 @@
 import { PaymentGateway } from './payments.types';
 // agrupa as credenciais específicas do Stripe, evitando receber campos desnecessários de outros tipos
 type StripeCredentials = {
-  clientId: string;
-  clientSecret: string;
+  apiKey: string;
   sandbox?: boolean;
 };
 

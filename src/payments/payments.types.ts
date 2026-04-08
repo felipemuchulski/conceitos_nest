@@ -1,7 +1,7 @@
 export type PaymentProvider = 'pix' | 'stripe';
 //Aqui eu estou dizendo que o provider pode ter um desses valores
 
-export interface PaymentsModule {
+export interface PaymentsModuleOptions {
   provider: PaymentProvider;
   apiKey?: string; //ex: Stripe
   pixClientId?: string; //ex: Pix provider

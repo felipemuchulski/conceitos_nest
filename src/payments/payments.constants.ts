@@ -1,5 +1,6 @@
 export const PAYMENT_MODULE_OPTIONS = Symbol('PAYMENT_MODULE_OPTIONS');
-export const PAYMENT_GATEWAY = Symbol('PAYMENT_GATEWAY');
+export const PIX_GATEWAY = Symbol('PIX_GATEWAY');
+export const STRIPE_GATEWAY = Symbol('STRIPE_GATEWAY');
 /*
 A constante está sendo utilizada para guardar o Symbol e reutilizá-lo em vários lugares
 sem precisar recriar.
