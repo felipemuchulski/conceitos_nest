@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -6,7 +6,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RecadosModule } from 'src/recados/recados.module';
 import { PessoasModule } from 'src/pessoas/pessoas.module';
-import { SimplesMiddleware } from 'src/common/middlewares/simples.middleware';
+import { SimpleMiddleware } from 'src/common/middlewares/single.middleware';
+import { APP_GUARD } from '@nestjs/core';
+import { IsAdminGuard } from 'src/common/guards/is-admin.guard';
 
 @Module({
   imports: [
@@ -27,10 +29,20 @@ import { SimplesMiddleware } from 'src/common/middlewares/simples.middleware';
     PessoasModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: IsAdminGuard,
+    },
+  ],
+  exports: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(SimplesMiddleware).forRoutes();
+    consumer.apply(SimpleMiddleware).forRoutes({
+      path: '*',
+      method: RequestMethod.ALL,
+    });
   }
 }
