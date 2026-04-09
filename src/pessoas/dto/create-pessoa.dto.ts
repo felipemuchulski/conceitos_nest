@@ -2,16 +2,16 @@ import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-valid
 
 export class CreatePessoaDto {
   @IsEmail()
-  email: string;
+  email!: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
-  password: string;
+  password!: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
   @MaxLength(100)
-  nome: string;
+  nome!: string;
 }

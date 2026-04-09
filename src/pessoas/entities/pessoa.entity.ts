@@ -5,17 +5,17 @@ import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Up
 @Entity()
 export class Pessoa {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ unique: true })
   @IsEmail()
-  email: string;
+  email!: string;
 
   @Column({ length: 255 })
-  passwordHash: string;
+  passwordHash!: string;
 
   @Column({ length: 100 })
-  nome: string;
+  nome!: string;
 
   @CreateDateColumn()
   createdAt?: Date;
@@ -24,8 +24,8 @@ export class Pessoa {
   updatedAt?: Date;
 
   @OneToMany(() => Recado, (recado) => recado.de)
-  recadosEnviados: Recado[];
+  recadosEnviados!: Recado[];
 
   @OneToMany(() => Recado, (recado) => recado.para)
-  recadosRecebidos: Recado[];
+  recadosRecebidos!: Recado[];
 }
