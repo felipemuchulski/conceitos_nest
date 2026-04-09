@@ -14,7 +14,7 @@ export interface PaymentGateway {
     amountCents: number; //Valor da cobrança em centavos
     currency: 'BRL'; //tipo da moeda
     reference: string; //identtificador único criado para rastrear a cobrança
-  }): Promise<{ id: string; status: 'pending' | 'paid' | 'failed' }>;
+  }): Promise<{ id: string; status: 'pending' | 'paid' | 'failed' | 'cancelled' }>;
 }
 /*
  amountCents é utilizado centavos para evitar problemas com ponto flutuante.

@@ -15,6 +15,18 @@ export class Payment {
   reference!: string;
 
   @Column()
+  @IsIn(['pix', 'stripe'])
+  provider!: 'pix' | 'stripe';
+
+  @Column({ nullable: true })
+  @IsString()
+  externalId?: string; // o Id que o gateway retornou
+
+  @Column({ default: 'pending' })
+  @IsIn(['pending', 'paid', 'failed', 'cancelled'])
+  status!: 'pending' | 'paid' | 'failed' | 'cancelled';
+
+  @Column()
   @IsOptional()
   @IsIn(['BRL'])
   currency? = 'BRL';
