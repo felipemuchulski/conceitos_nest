@@ -5,7 +5,7 @@ export class CreatePaymentDto {
   amountCents!: number;
 
   @IsString()
-  reference!: string;
+  reference!: string; // id gerado com o gateway pagamento
 
   @IsIn(['pix', 'stripe'])
   provider!: 'pix' | 'stripe';
