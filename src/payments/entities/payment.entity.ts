@@ -10,6 +10,10 @@ export class Payment {
   @IsNumber()
   amountCents!: number;
 
+  @Column()
+  @IsNumber()
+  userId!: number;
+
   @Column({ unique: true })
   @IsString()
   reference!: string;

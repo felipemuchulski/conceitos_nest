@@ -3,10 +3,15 @@ import type { PaymentsModuleOptions } from './payments.types';
 import { PaymentService } from './payment.service';
 import { PixGateway } from './pix.gateway';
 import { StripeGateway } from './stripe.gateway';
-import { DynamicModule, Module, Provider } from '@nestjs/common';
+import { DynamicModule, MiddlewareConsumer, Module, NestModule, Provider } from '@nestjs/common';
+import { LogPaymentMiddleware } from './middlewares/Log-payment.middleware';
 
 @Module({})
-export class PaymentsModule {
+export class PaymentsModule implements NestModule {
+  // Estou configurando o Middleware de logs para todas rotas de pagamento
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LogPaymentMiddleware).forRoutes('payments');
+  }
   // static permite chamar forRoot direto na classe sem precisar instanciá-la
   static forRoot(options: PaymentsModuleOptions): DynamicModule {
     const optionsProvider: Provider = {

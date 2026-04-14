@@ -19,7 +19,7 @@ export class PaymentService {
   ) {}
 
   // cria a cobrança usando o gateway escolhido pelo cliente (pix ou stripe)
-  async createCharge(createChargeDto: CreatePaymentDto) {
+  async createCharge(createChargeDto: CreatePaymentDto, userId: number) {
     const { reference, amountCents, provider } = createChargeDto;
     const paymentExist = this.repositoryPayment.findOneBy({
       reference: createChargeDto.reference,
@@ -37,6 +37,7 @@ export class PaymentService {
       reference,
       amountCents,
       provider,
+      userId,
       externalId: result.id,
       status: result.status,
     });
@@ -44,7 +45,13 @@ export class PaymentService {
     return this.repositoryPayment.save(payment);
   }
 
-  //encontrar todas as cobranças
+  //encontrar todas as cobranças por usuário
+  async findAllByUser(userId: number) {
+    const payments = await this.repositoryPayment.findBy({ userId });
+    return payments;
+  }
+
+  // encontra todos as cobranças quando o usuário é admin
   async findAll() {
     const payments = await this.repositoryPayment.find();
     return payments;
@@ -70,7 +77,7 @@ export class PaymentService {
     });
 
     if (!payment_reference) {
-      throw new NotFoundException(`Pagamento com referência ${payment_reference} não encontrado`);
+      throw new NotFoundException(`Pagamento com referência ${reference} não encontrado`);
     }
 
     return payment_reference;
@@ -81,11 +88,11 @@ export class PaymentService {
     const payment = await this.repositoryPayment.findOneBy({ reference: reference }); //encontra o pagamento pela referencia
 
     if (!payment) {
-      throw new NotFoundException(`Pagamento com referência ${payment} não encontrado`);
+      throw new NotFoundException(`Pagamento com referência ${reference} não encontrado`);
     }
 
     if (payment.status !== 'pending') {
-      throw new ConflictException('Não é possível atualizar o status de um pagamento que não é pendente');
+      throw new ConflictException('Não é possível atualizar o valor de um pagamento que não é pendente');
     }
 
     payment.amountCents = updatePaymentAmount.amountCents; // atribui o novo valor
