@@ -45,12 +45,6 @@ export class PaymentService {
     return this.repositoryPayment.save(payment);
   }
 
-  //encontrar todas as cobranças por usuário
-  async findAllByUser(userId: number) {
-    const payments = await this.repositoryPayment.findBy({ userId });
-    return payments;
-  }
-
   // encontra todos as cobranças quando o usuário é admin
   async findAll() {
     const payments = await this.repositoryPayment.find();
@@ -70,7 +64,13 @@ export class PaymentService {
     return payment_id;
   }
 
-  //encontra uma cobrança por reference para rastreamento de negócio
+  //encontrar todas as cobranças por usuário
+  async findAllByUser(userId: number) {
+    const payments = await this.repositoryPayment.findBy({ userId });
+    return payments;
+  }
+
+  //encontra uma cobrança por reference para rastreamento de negócio - vai exibir se esse for o usuário da referência
   async findByReference(reference: string) {
     const payment_reference = await this.repositoryPayment.findOneBy({
       reference: reference,
