@@ -9,6 +9,7 @@ import { PessoasModule } from 'src/pessoas/pessoas.module';
 import { SimpleMiddleware } from 'src/common/middlewares/single.middleware';
 import { APP_GUARD } from '@nestjs/core';
 import { IsAdminGuard } from 'src/common/guards/is-admin.guard';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { IsAdminGuard } from 'src/common/guards/is-admin.guard';
 
     RecadosModule,
     PessoasModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
