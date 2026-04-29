@@ -47,32 +47,27 @@ export class PessoasService {
     return pessoa;
   }
 
+  async findOneByEmail(email: string) {
+    const emailExiste = await this.pessoasRepository.findOneBy({ email });
+    if (!emailExiste) throw new NotFoundException('Email não encontrado');
+    return emailExiste;
+  }
+
   async update(id: number, updatePessoaDto: UpdatePessoaDto) {
     const { password, ...anotherInfos } = updatePessoaDto;
-
     const passwordHash = password ? await this.hashingService.hash(password) : undefined;
-
     const pessoa = await this.pessoasRepository.preload({
       id,
       ...anotherInfos,
       ...(passwordHash && { passwordHash }),
     });
-
-    if (!pessoa) {
-      throw new NotFoundException('Pessoa não encontrada');
-    }
-
+    if (!pessoa) throw new NotFoundException('Pessoa não encontrada');
     return this.pessoasRepository.save(pessoa);
   }
 
   // remove não deve ser permitido a pessoa se apagar da base de dados
   async remove(id: number) {
-    const existePessoa = await this.pessoasRepository.findOneBy({ id });
-
-    if (!existePessoa) {
-      throw new NotFoundException(`Pessoa com o id ${id} não encontrada`);
-    }
-
-    return this.pessoasRepository.delete({ id });
+    const pessoa = await this.findOne(id);
+    return this.pessoasRepository.remove(pessoa);
   }
 }
