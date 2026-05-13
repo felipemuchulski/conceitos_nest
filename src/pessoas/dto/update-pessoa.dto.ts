@@ -6,5 +6,5 @@ export class UpdatePessoaDto extends PartialType(CreatePessoaDto) {
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
-  password: string;
+  password!: string;
 }
