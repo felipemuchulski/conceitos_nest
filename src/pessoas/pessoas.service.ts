@@ -70,4 +70,10 @@ export class PessoasService {
     const pessoa = await this.findOne(id);
     return this.pessoasRepository.remove(pessoa);
   }
+
+  // Incrementa tokenVersion — invalida TODOS os tokens ativos do usuário
+  // Qualquer token emitido antes disso vai falhar no guard
+  async invalidateTokens(id: number): Promise<void> {
+    await this.pessoasRepository.increment({ id }, 'tokenVersion', 1);
+  }
 }

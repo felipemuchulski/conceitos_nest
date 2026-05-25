@@ -3,6 +3,7 @@ import { HashingService } from './hashing/hashing.service';
 import { BcryptService } from './hashing/bcrypt.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { AuthTokenGuard } from './guards/auth-token.guard';
 import { PessoasModule } from '@/pessoas/pessoas.module';
 import { ConfigModule } from '@nestjs/config';
 import jwtConfig from './config/jwt.config';
@@ -18,7 +19,8 @@ import { JwtModule } from '@nestjs/jwt';
       useClass: BcryptService,
     },
     AuthService,
+    AuthTokenGuard,
   ],
-  exports: [HashingService, JwtModule, ConfigModule],
+  exports: [HashingService, JwtModule, ConfigModule, AuthTokenGuard],
 })
 export class AuthModule {}

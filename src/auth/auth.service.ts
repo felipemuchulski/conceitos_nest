@@ -78,7 +78,7 @@ export class AuthService {
     const basePayload = { sub, email, tokenVersion };
 
     // Promise.all gera os dois tokens em paralelo (mais eficiente)
-    const [acessToken, refreshToken] = await Promise.all([
+    const [accessToken, refreshToken] = await Promise.all([
       //Access token: vida curta, usado em toda requisição autenticada
       this.jwtService.signAsync(basePayload, {
         audience: this.jwtConfiguration.audience,
@@ -96,6 +96,6 @@ export class AuthService {
       }),
     ]);
 
-    return { acessToken, refreshToken };
+    return { accessToken, refreshToken };
   }
 }
